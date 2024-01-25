@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Home</title>
+    <style>
+      #copy {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Use one password for every site (safely!)</h1>
+    <form>
+      <p>
+        <label for="host">Host</label>
+        <input name="host" type="text" />
+      </p>
+      <p>
+        <label for="key">Key</label>
+        <input name="key" type="password" />
+      </p>
+      <input type="submit" value="Submit" />
+    </form>
+    <p id="hash"></p>
+    <p>
+      <button type="button" onclick="copyToClipboard()" id="copy">
+        Copy to clipboard
+      </button>
+    </p>
+    <script src="./crypto.js"></script>
+    <script type="text/javascript">
+      const form = document.querySelector("form");
+      form.addEventListener("submit", function (e) {
+        e.preventDefault();
+        const host = form.host.value;
+        const key = form.key.value;
+        const ciphertext = sjcl.encrypt(key, host);
+        const hash = JSON.parse(ciphertext).iv;
+        document.querySelector("#hash").textContent = "$1A" + hash.slice(0, 13);
+        document.querySelector("#copy").style.display = "block";
+      });
+
+      function copyToClipboard() {
+        const range = document.createRange();
+        range.selectNode(document.getElementById("hash"));
+        window.getSelection().removeAllRanges();
+        window.getSelection().addRange(range);
+        document.execCommand("copy");
+        window.getSelection().removeAllRanges();
+      }
+    </script>
+  </body>
+</html>
