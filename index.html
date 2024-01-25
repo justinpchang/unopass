@@ -37,7 +37,7 @@
         const key = form.key.value;
         const ciphertext = sjcl.encrypt(key, host);
         const hash = JSON.parse(ciphertext).iv;
-        document.querySelector("#hash").textContent = "$1A" + hash.slice(0, 13);
+        document.querySelector("#hash").textContent = "$1A" + hash.slice(0, 24);
         document.querySelector("#copy").style.display = "block";
       });
 
